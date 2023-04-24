@@ -11,7 +11,6 @@ import (
 	"sort"
 
 	"github.com/gorilla/mux"
-	"github.com/rakyll/statik/fs"
 	"github.com/spf13/cast"
 
 	abci "github.com/tendermint/tendermint/abci/types"
@@ -150,8 +149,6 @@ import (
 
 	"github.com/evmos/evmos/v11/x/ibc/transfer"
 	transferkeeper "github.com/evmos/evmos/v11/x/ibc/transfer/keeper"
-	"github.com/ignite/cli/docs"
-	"github.com/ignite/cli/ignite/pkg/openapiconsole"
 )
 
 func init() {
@@ -971,8 +968,8 @@ func (app *Sidechain) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.API
 	ModuleBasics.RegisterGRPCGatewayRoutes(clientCtx, apiSvr.GRPCGatewayRouter)
 
 	// register app's OpenAPI routes.
-	apiSvr.Router.Handle("/static/openapi.yml", http.FileServer(http.FS(docs.Docs)))
-	apiSvr.Router.HandleFunc("/openapi", openapiconsole.Handler(Name, "/static/openapi.yml"))
+	//apiSvr.Router.Handle("/static/openapi.yml", http.FileServer(http.FS(docs.Docs)))
+	//apiSvr.Router.HandleFunc("/openapi", openapiconsole.Handler(Name, "/static/openapi.yml"))
 
 	// register swagger API from root so that other applications can override easily
 	// if apiConfig.Swagger {
@@ -1035,13 +1032,8 @@ func (app *Sidechain) GetTxConfig() client.TxConfig {
 
 // RegisterSwaggerAPI registers swagger route with API Server
 func RegisterSwaggerAPI(_ client.Context, rtr *mux.Router) {
-	statikFS, err := fs.New()
-	if err != nil {
-		panic(err)
-	}
-
-	staticServer := http.FileServer(statikFS)
-	rtr.PathPrefix("/swagger/").Handler(http.StripPrefix("/swagger/", staticServer))
+	// Register Swagger UI
+	rtr.PathPrefix("/swagger/").Handler(http.StripPrefix("/swagger", http.FileServer(http.Dir("./client/docs/swagger-ui/"))))
 }
 
 // GetMaccPerms returns a copy of the module account permissions
