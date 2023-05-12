@@ -8,7 +8,7 @@ import (
 	"sidechain/x/epochs/types"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
-	//evm "sidechain/x/evm/types"
+	evm "github.com/evmos/ethermint/x/evm/types"
 )
 
 // Test helpers
@@ -49,7 +49,7 @@ func (suite *KeeperTestSuite) CommitAfter(t time.Duration) {
 	suite.ctx, err = testutil.Commit(suite.ctx, suite.app, t, nil)
 	suite.Require().NoError(err)
 
-	//queryHelper := baseapp.NewQueryServerTestHelper(suite.ctx, suite.app.InterfaceRegistry())
-	//evm.RegisterQueryServer(queryHelper, suite.app.EvmKeeper)
-	//suite.queryClientEvm = evm.NewQueryClient(queryHelper)
+	queryHelper := baseapp.NewQueryServerTestHelper(suite.ctx, suite.app.InterfaceRegistry())
+	evm.RegisterQueryServer(queryHelper, suite.app.EvmKeeper)
+	suite.queryClientEvm = evm.NewQueryClient(queryHelper)
 }
