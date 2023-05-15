@@ -152,9 +152,9 @@ func (suite *KeeperTestSuite) DoSetupTest(t require.TestingT) {
 	suite.queryClientEvm = evm.NewQueryClient(queryHelperEvm)
 
 	// bond denom
-	params := minttypes.DefaultParams()
+	// params := minttypes.DefaultParams()
 	stakingParams := suite.app.StakingKeeper.GetParams(suite.ctx)
-	stakingParams.BondDenom = params.GetMintDenom()
+	stakingParams.BondDenom = "aside"
 	suite.app.StakingKeeper.SetParams(suite.ctx, stakingParams)
 
 	// Set Validator
