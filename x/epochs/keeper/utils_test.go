@@ -53,3 +53,20 @@ func (suite *KeeperTestSuite) CommitAfter(t time.Duration) {
 	evm.RegisterQueryServer(queryHelper, suite.app.EvmKeeper)
 	suite.queryClientEvm = evm.NewQueryClient(queryHelper)
 }
+
+// func (suite *KeeperTestSuite) CommitAfter(t time.Duration) {
+// 	_ = suite.app.Commit()
+// 	header := suite.ctx.BlockHeader()
+// 	header.Height += 1
+// 	header.Time = header.Time.Add(t)
+// 	suite.app.BeginBlock(abci.RequestBeginBlock{
+// 		Header: header,
+// 	})
+
+// 	// update ctx
+// 	suite.ctx = suite.app.BaseApp.NewContext(false, header)
+
+// 	queryHelper := baseapp.NewQueryServerTestHelper(suite.ctx, suite.app.InterfaceRegistry())
+// 	evm.RegisterQueryServer(queryHelper, suite.app.EvmKeeper)
+// 	suite.queryClientEvm = evm.NewQueryClient(queryHelper)
+// }
